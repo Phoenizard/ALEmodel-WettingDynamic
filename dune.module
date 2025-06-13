@@ -1,0 +1,9 @@
+################################
+# Dune module information file #
+################################
+
+Module: ALEModelAmdis2
+Version: 1
+Maintainer: marcel-mokbel@gmx.de
+
+Depends: amdis dune-common dune-istl dune-geometry dune-uggrid dune-grid dune-alugrid dune-localfunctions dune-typetree dune-functions dune-vtk dune-grid-glue amdis-extensions dune-curvedgrid dune-curvedgeometry dune-foamgrid amdis-surfacebasis

@@ -1,0 +1,12 @@
+#install headers
+install(DIRECTORY subdomains/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/amdis/ALEModelAmdis2)
+#install headers
+install(DIRECTORY localoperators/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/amdis/ALEModelAmdis2)
+#install headers
+install(DIRECTORY remeshing/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/amdis/ALEModelAmdis2)
+#install headers
+install(DIRECTORY modelExtensions/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/amdis/ALEModelAmdis2)

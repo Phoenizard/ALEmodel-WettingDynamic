@@ -1,0 +1,279 @@
+L: 0.00001
+T: 0.1
+
+% ========== shell parameter ====================================
+
+closed shell: 1                                              %1 if shell is closed, 0 else (only for simulation speed, optimization for closed shells)
+
+surfaceTension: 0.0*1.e-3                                    %3 % 1 % = 0.0010 * $T*$T/$L/$L/$L
+Kb: 4e-20
+bendingStiffness: ${Kb}*$T*$T/($L*$L*$L*$L*$L)               %11.1 * 1e-15 * $T*$T/$L/$L/$L/$L/$L
+spontaneous curvature: 0                                     % in 1/m
+areaShear: 0.0                                               %1.e7 % 0.008333 * $T*$T/$L/$L/$L
+areaDilation: 0.0*1e-3*$T*$T/($L*$L*$L)                            %25.0 % 3.e7 % 0.025 * $T/*$T/$L$L/$L
+lineTension: 0.0*10.e-12*$T*$T/$L/$L/$L/$L
+zeroReferenceCurvature: 0                                    % 1 if reference curvature is zero, 0 else (EXPLICIT BENDING ONLY!)
+test for elastic only: 1.0
+
+correct point distances: 0                                   %1 if points on interface and shell should be kept in equal distances
+
+% ========== inextensibility =====================================
+is shell incompressible: 0                                   %1 if incompressible shell, 0 else
+surface inextensibility diffusion: 1.e-11
+surface concentration relaxation: 0.0001
+
+% ========== surface tensions ====================================
+sigma: 0.15
+parameters->sigma: 50*1e-6*$T*$T/($L*$L*$L)                  % = sigma_{\beta\gamma} in [N/m] -> umrechnungsfaktor 10^6*2*pi
+parameters->sigma1: 50*${sigma}*1e-6*$T*$T/($L*$L*$L)            % = sigma_{\alpha\beta} 1-sigma/6/sqrt(2)
+parameters->sigma0: 50*${sigma}*1e-6*$T*$T/($L*$L*$L)
+
+% ========== activity ============================================
+molecular bulk volume: 65*(1.e-9/$L)*(1.e-9/$L)*(1.e-9/$L)   % in [m^3]
+molecular surface area: 20*(1.e-9/$L)*(1.e-9/$L)             % in [m^2]
+parameters->sigmaGamma: 0.0*${parameters->sigma}                 % (is rescaled in the code) interface tension for surface phase field
+M: 2e-16
+parameters->mobilityGamma: 0.0*$M/$T                             % (is rescaled in the code) mobility of surface CH
+f: 0.0
+k0: $f*1.0e-5*$L*$L/$T                                       % in [m*s/kg]
+kOn: $f*10.0*$T                                              % in [1/s]
+kOff: $f*10.0*$T                                             % in [1/s]
+
+initial phiGamma: 0.5
+
+% ========== permeability ========================================
+parameters->permeability: 0.0*1e-7*$L/$T % 0.001             % m/s => 10^-8 m²s/kg -> 1e-8*$L/$T
+phi jump threshold: 0.2                                      % 1.e-3 %only phi values below are considered for jump of phi over \Gamma
+use p0 for permeability: 0
+
+
+% ========== fluid parameter ===================================
+visc: 10
+stokes->viscosityPhase:  10.001*$T/$L/$L                     % =1.0 * $T/$L/$L, internal viscosity (phi = 1)
+stokes->viscosityOutside: (${visc}+2e-3)*$T/$L/$L            % =1.0 * $T/$L/$L, external viscosity (phi = 0)
+stokes->viscosityInside: ${visc}*$T/$L/$L                    % =1.0 * $T/$L/$L, external viscosity (phi = 0)
+stokes->density: 1000.0                                      % inside phase field (phi = 1)
+stokes->density2: 1000.0                                     % outside phase field (phi = 0)
+stokes->densityOutside: 1000.0                               % outside shell
+gravity: 0                                                   % 1962 % *$T*$T/$L % gravitational accelaration
+direction: 1 -0.15
+
+parameters->keep membrane centered: 0                        %1 if membrane should stay in center of domain, 0 else
+
+%=========== remeshing parameter =====================================
+
+remeshing type: 0                                            % 0 for remeshing at minimum angle, 1 for time step controlled remeshing
+remeshing every i-th time step: 100                            % perform a remeshing step in every i-th time step
+remeshing at mimimum angle: 0.14                             % 0.392699 % pi/8
+
+line mesh: 1                                                 % is the membrane just a straight line?
+
+% if mesh size should be determined by field instead of point size values,
+% the mesh gets refined automatically without providing any extra parameters
+% however, parameters can be provided, see MeshGenerator.h
+size by field: 1
+
+%mesh resolution at shell phi 1: 0.002
+mesh resolution at phase field interface: 0.002
+%mesh resolution at boundary field: 0.2
+
+
+% if size by field is 0
+mesh resolution at shell: 0.025 %0.005
+mesh resolution at box: 0.4 %0.015
+mesh resolution at boundary: 0.1 %0.015
+
+%if points are closer to each other than this distance, they get removed
+remove interface points: 1
+
+% points away from the interface get removed if closer to this value
+% the value is a multiple of the minimum distance between two interface points,
+% e.g. value 1 means only remove points if closer to each other than half of the desired distance at the interface
+distance for removal of interface points: 1
+factor for removal of phase field interface points: 0.3
+
+reduce time step after remeshing: 1                          % after remeshing... set 1 if time step size should be reduced, 0 else
+adapt->time step reduction factor: 0.1                       % set the factor by which the time step size should be reduced, 1: no reduction
+number of time steps for reduction: 3                        % set the numer of time steps for which the time step size should be reduced
+
+%=========== initial phase field parameters ==============================
+
+parameters->number of circles: 1
+
+% first circle
+parameters->radius1_0: 0.2
+parameters->radius2_0: 0.2
+parameters->center0: 100 0 % 0.225 0.0 %0.285 0.0              % 0.13 0.18 % 0.07
+cell height: -32.5                                           % no phase field below this value
+
+%second circle
+parameters->radius1_1: 0.35
+parameters->radius2_1: 0.35
+parameters->center1: 0.71 0.71 % 0.07
+
+%third circle
+parameters->radius1_2: 0.075
+parameters->radius2_2: 0.075
+parameters->center2: -0.23 -0.1 % 0.07
+
+%fourth circle
+parameters->radius1_3: 0.045
+parameters->radius2_3: 0.045
+parameters->center3: -0.18 0.18 % 0.07
+
+%fifth circle
+parameters->radius1_4: 0.13
+parameters->radius2_4: 0.13
+parameters->center4: 0.0 -0.25 % 0.07
+
+% =========== phase field parameters =============================
+num: 4
+
+droplet volume conservation parameter: 0.0
+polynomial degree ch: 2
+
+phase field inside: 0                                        % 1 if phase field should be present inside
+phase field outside: 1                                       % 1 if phase field should be present outside
+
+circles or initial value: 0                                  % 0 if circles, 1 if initial value
+phase field initial value: 0.1                               % initial value of no circles
+phase field initial value random: 0.0                        % initial value of no circles
+
+phase field random noise: 1.414*0.25+0.0001*${num}                 %
+velocity random noise: 0.0 %+0.0001*${num}
+
+binodal BCs for phi: 1                                       % use phi0 on right, top and bottom are hydrophobic for the condensate
+
+use phase dependent noise: 0
+
+normal distribution mean: 0.0                                % for random values: mean value of Gaussian standard distr
+normal distribution standard dev: 0.2                        % respective standard deviation
+
+initial radius: 6.0                                          % radius within initial phase field should be located
+initial radius inside: 0.0                                   % radius to exclude initial phase field
+
+use capillary stress: 1                                      % 1 if capillary stress should be used, 0 if modified coupling term
+parameters->couplingSign3: 0                                 % negative is correct if capillary stress is 0 (or zero, if capillary stress is 1)
+
+parameters->eps: 0.002
+
+parameters->M0: $M/$T                                        % in [m³s/kg] % initial mobility
+parameters->M: $M/$T                                         % in [m³s/kg] % mobility after remeshing (for a few time steps)
+
+refinement->interface: 8
+refinement->bulk: 0
+refinement->refine with stretch: 0                           % = 1 if refinement after strong stretch on the surface is desired
+
+refinement vAvg only on surface: 0                           % compute average element volume based on the elements on the surface (1) or the whole grid (0)
+
+% ========== other ==============================================
+
+level of information: 1
+
+volume restore constant: 0.00
+axisymmetric: 0
+axisymmetric dirichlet: 1
+axisymmetric dirichlet kappaVecOld: 0
+
+pressure zero left: 1
+line mesh no movement on top and bottom: 1
+no movement on left and right: 1
+
+move grid points with normal velocity: 0
+
+ignore laplace problem: 0                                    % only solve main problem without any mesh movement, only tested for line mesh
+
+% ========== Output Info ==============================================
+
+output directory: ../ResultsALEModelAmdis2/testBinodalsigma_phi0_${phase field initial value}_sigma_${sigma}_${num}
+output_filename: energy_output
+
+parameter file name: ./init/domo.2d
+parameter output file name: ${output directory}/parameters.2d
+
+every: 1
+every2: 10000
+every output file: 3
+
+stokesMesh->macro file name: ./macro/lineBinodal.msh %circleLargerDomainLarge.msh
+stokes->mesh: newMesh
+newMesh->macro file name: ${output directory}/newMesh.msh
+newMeshRestore->macro file name: ${output directory}/backup/newMesh54.100000.msh
+stokesMesh->global refinements: 0
+
+stokes->space->solver: direct
+stokes->space->solver->relative tolerance: 1e-8
+stokes->space->solver->info:	1
+
+laplace->space->solver: direct
+laplace->space->solver->relative tolerance: 1e-8
+laplace->space->solver->info:	-1
+
+ipolProb->space->solver: direct
+ipolProb->space->solver->relative tolerance: 1e-8
+ipolProb->space->solver->info:	-1
+
+kappaVecOld->solver: direct
+kappaVecOld->solver->relative tolerance: 1e-8
+kappaVecOld->solver->info:	-1
+
+stokes->space->output[0]->format: vtk
+stokes->space->output[0]->filename: stokes_u.2d
+stokes->space->output[0]->name: u
+stokes->space->output[0]->subsampling: 2
+stokes->space->output[0]->output directory: ${output directory}
+stokes->space->output[0]->mode: 0
+stokes->space->output[0]->animation: 1
+stokes->space->output[0]->write every i-th timestep:	$every2
+
+ipolProb->space->output[0]->format: vtk
+ipolProb->space->output[0]->filename: ipolProb.2d
+ipolProb->space->output[0]->name: ipolProb
+ipolProb->space->output[0]->output directory: ${output directory}
+ipolProb->space->output[0]->mode: 0
+ipolProb->space->output[0]->animation: 1
+ipolProb->space->output[0]->write every i-th timestep:	1
+
+ipolProb->space->output[2]->format: vtk
+ipolProb->space->output[2]->filename: ipolProb_phi.2d
+ipolProb->space->output[2]->name: phi5
+ipolProb->space->output[2]->output directory: ${output directory}
+ipolProb->space->output[2]->mode: 0
+ipolProb->space->output[2]->animation: 1
+ipolProb->space->output[2]->write every i-th timestep:	1
+
+ipolProb->space->output[3]->format: vtk
+ipolProb->space->output[3]->filename: ipolProb_mu.2d
+ipolProb->space->output[3]->name: mu
+ipolProb->space->output[3]->output directory: ${output directory}
+ipolProb->space->output[3]->mode: 0
+ipolProb->space->output[3]->animation: 1
+ipolProb->space->output[3]->write every i-th timestep:	1
+
+
+adapt->max iteration: 10   % maximal number of fixed point iterations
+adapt[0]->tolerance: 1.e-3
+adapt->max timestep iteration: 1
+adapt->max time iteration: 1
+adapt->strategy: 0
+
+% ========== Timestep Info ==============================================
+
+adapt->timestep: 0.12
+adapt->start time: 0.0
+adapt->end time: ${adapt->timestep}*5000 %000
+
+start with reduced time step: 0                              % start the simulation with a smaller time step, depends on "adapt->time step reduction factor" and "number of time steps for reduction"
+adapt->time step reduction factor init: 10
+number of time steps for reduction init: 700
+refinement->interface at start: ${refinement->interface}
+
+% =========== Classic or optimized operators 0: optimized, 1: classic =============================
+
+useOldTermFShell: 0                                          % shell force operators
+useOldTermSCH: 0                                             % surface Cahn Hilliard eqs
+useOldTermNS: 0                                              % Navier Stokes eqs
+useOldTermCH: 0                                              % Cahn Hilliard eqs
+useOldTermXS: 0                                              % xS, kappaVec eqs
+useOldTermLambdas: 0                                         % lambda1, lambda2 eqs
+useOldTermCoupling: 0                                        % Surface Bulk Coupling Operators
