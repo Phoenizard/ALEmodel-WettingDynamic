@@ -153,7 +153,7 @@ move grid points with normal velocity: 0
 
 % ========== Output Info ==============================================
 
-output directory: ../ResultsALEModelAmdis2/Jun13-inf15-circular-long
+output directory: ../ResultsALEModelAmdis2/Jun16-inf15-circular-long
 % output directory: ../ResultsALEModelAmdis2/check-finer3
 output_filename: energy_output
 
@@ -229,7 +229,7 @@ adapt->strategy: 0
 
 adapt->timestep: 500
 adapt->start time: 0.0
-adapt->end time: 1/$T
+adapt->end time: 1 / $T
 
 start with reduced time step: 0      %start the simulation with a smaller time step, depends on "adapt->time step reduction factor" and "number of time steps for reduction"
 adapt->time step reduction factor init: 0.05
