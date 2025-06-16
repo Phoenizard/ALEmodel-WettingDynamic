@@ -232,7 +232,7 @@ private:
                                 return ((std::pow(x[0], 2) + std::pow(x[1], 2) <= std::pow(radius, 2) &&
                                          std::pow(x[0], 2) + std::pow(x[1], 2) >= std::pow(radiusIn, 2)) ?
                                         dist(getGenerator()) : 0.0) * (use && phiMean ? 2.0*phi*(1.0-phi) : 1.0) * ((visc > nuIn) ? 1.0 : 0.0);
-                            }, X(), clamp(nschProb_.getPhase(),0.0,1.0), valueOf(nschProb_.getElementSizes()), valueOf(nschProb_.getViscosityDOF()));
+                            }, X(), clamp(nschProb_.getPhase(),0.0,2.0), valueOf(nschProb_.getElementSizes()), valueOf(nschProb_.getViscosityDOF()));
         makeBoundariesZero(input);
     }
 
