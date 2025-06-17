@@ -123,7 +123,7 @@ polynomial degree ch: 2
 phase field inside: 1                       % 1 if phase field should be present inside
 phase field outside: 0                      % 1 if phase field should be present outside
 circles or initial value: 1                 % 0 if circles, 1 if initial value
-phase field initial value: 1              % initial value of no circles
+phase field initial value: 1.6606              % initial value of no circles
 phase field initial value random: 0       % initial value of no circles
 initial radius: 0.5395                       % radius within initial phase field should be located
 initial radius inside: 0.52                 % radius to exclude initial phase field
@@ -153,7 +153,7 @@ move grid points with normal velocity: 0
 
 % ========== Output Info ==============================================
 
-output directory: ../ResultsALEModelAmdis2/Jun16-inf15-circular-long
+output directory: ../ResultsALEModelAmdis2/Jun17-inf15-init2-test
 % output directory: ../ResultsALEModelAmdis2/check-finer3
 output_filename: energy_output
 
@@ -229,7 +229,7 @@ adapt->strategy: 0
 
 adapt->timestep: 500
 adapt->start time: 0.0
-adapt->end time: 1 / $T
+adapt->end time: 2000
 
 start with reduced time step: 0      %start the simulation with a smaller time step, depends on "adapt->time step reduction factor" and "number of time steps for reduction"
 adapt->time step reduction factor init: 0.05

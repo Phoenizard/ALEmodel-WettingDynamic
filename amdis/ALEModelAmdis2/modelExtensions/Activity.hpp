@@ -108,11 +108,11 @@ public:
 
             DOFVector muS_2(gridView, Dune::Surfacebasis::surfaceLagrange<1>(partitions_));
             DOFVector muS2_2(gridView, Dune::Surfacebasis::surfaceLagrange<1>(partitions_));
-            surfaceValueOf(muS_2,partitions_,0) << X(1)*(k0_* nschProb_.solution(_mu) + kOn_ * clamp(nschProb_.solution(_phiS),0.0,2.0)
+            surfaceValueOf(muS_2,partitions_,0) << X(1)*(k0_* nschProb_.solution(_mu) + kOn_ * clamp(nschProb_.solution(_phiS),-0.4632,1.6606)
                                                          - k0_ * molecularSurfaceArea_/molecularBulkVol_ * nschProb_.solution(_muGamma)
                                                          - kOff_ * nschProb_.solution(_phiGamma));
 
-            surfaceValueOf(muS2_2,partitions_,0) << X(1)*X(1)*(k0_* nschProb_.solution(_mu) + kOn_ * clamp(nschProb_.solution(_phiS),0.0,2.0)
+            surfaceValueOf(muS2_2,partitions_,0) << X(1)*X(1)*(k0_* nschProb_.solution(_mu) + kOn_ * clamp(nschProb_.solution(_phiS),-0.4632,1.6606)
                                                                - k0_ * molecularSurfaceArea_/molecularBulkVol_ * nschProb_.solution(_muGamma)
                                                                - kOff_ * nschProb_.solution(_phiGamma));
 
@@ -121,13 +121,13 @@ public:
                         << X(1) * (k0_ * nschProb_.solution(_mu) + kOn_ * (1.0 - nschProb_.solution(_phiGamma))
                                    -
                                    k0_ * molecularSurfaceArea_ / molecularBulkVol_ * nschProb_.solution(_muGamma)
-                                   - kOff_ * nschProb_.solution(_phiGamma) * clamp(nschProb_.solution(_phiS),0.0,2.0));
+                                   - kOff_ * nschProb_.solution(_phiGamma) * clamp(nschProb_.solution(_phiS),-0.4632,1.6606));
 
                 surfaceValueOf(muS2_2, partitions_, 0)
                         << X(1) * X(1) * (k0_ * nschProb_.solution(_mu) + kOn_ * (1.0 - nschProb_.solution(_phiGamma))
                                           -
                                           k0_ * molecularSurfaceArea_ / molecularBulkVol_ * nschProb_.solution(_muGamma)
-                                          - kOff_ * nschProb_.solution(_phiGamma) * clamp(nschProb_.solution(_phiS),0.0,2.0));
+                                          - kOff_ * nschProb_.solution(_phiGamma) * clamp(nschProb_.solution(_phiS),-0.4632,1.6606));
             }
 
 
@@ -237,7 +237,7 @@ public:
                                                            - k0_ * molecularSurfaceArea_/molecularBulkVol_ * nschProb_.solution(_muGamma)
                                                            - kOff_ * nschProb_.solution(_phiGamma);
 
-        surfaceValueOf(muS3,nschProb_.partitionsRef(),0) << k0_* nschProb_.solution(_mu) + kOn_ * clamp(nschProb_.solution(_phiS),0.0,2.0)
+        surfaceValueOf(muS3,nschProb_.partitionsRef(),0) << k0_* nschProb_.solution(_mu) + kOn_ * clamp(nschProb_.solution(_phiS),-0.4632,1.6606)
                                                            - k0_ * molecularSurfaceArea_/molecularBulkVol_ * nschProb_.solution(_muGamma)
                                                            - kOff_ * nschProb_.solution(_phiGamma);
 
@@ -253,7 +253,7 @@ public:
                     <<  (k0_ * nschProb_.solution(_mu) + kOn_ * (1.0 - nschProb_.solution(_phiGamma))
                          -
                          k0_ * molecularSurfaceArea_ / molecularBulkVol_ * nschProb_.solution(_muGamma)
-                         - kOff_ * nschProb_.solution(_phiGamma) * clamp(nschProb_.solution(_phiS),0.0,2.0));
+                         - kOff_ * nschProb_.solution(_phiGamma) * clamp(nschProb_.solution(_phiS),-0.4632,1.6606));
         }
 
         auto const &spb = nschProb_.globalBasis()->preBasis().subPreBasis(_phiGamma);
