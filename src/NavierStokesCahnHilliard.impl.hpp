@@ -136,24 +136,24 @@ namespace AMDiS {
                 } else {
                     // Quarter Ring Shape without smoothing
                     double initialVal = Parameters::get<double>("phase field initial value").value_or(0);
-                    double randomVal = Parameters::get<double>("phase field initial value random").value_or(0);
+                    double EnvVal = Parameters::get<double>("env initial phase field").value_or(0);
                     double radius = Parameters::get<double>("initial radius").value_or(0.15);
                     double radiusIn = Parameters::get<double>("initial radius inside").value_or(0.15);
-                    this->getPhase() << 0.0;
+                    this->getPhase() << EnvVal; // set the environment value
                     WorldVector center{0.0, 0.0};
-                    auto QuarterRing = [initialVal, randomVal, radius, radiusIn](WorldVector const &x) {
+                    auto QuarterRing = [initialVal, EnvVal, radius, radiusIn](WorldVector const &x) {
                         double r = std::pow(x[0], 2) + std::pow(x[1], 2);
                         double theta = std::atan2(x[1], x[0]);
                         if (!((r <= std::pow(radius, 2) && r >= std::pow(radiusIn, 2)) && 
                                 (theta >= - M_PI / 5 && theta <= M_PI / 5))) {
                             return 0.0;
                         } else {
-                            return initialVal; // Set the phase of the Quarter Ring to initialVal
+                            return initialVal - EnvVal; // Set the phase of the Quarter Ring to initialVal
                         }
                     };
                     this->getPhase() += QuarterRing;
                 }
-                this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
+                // this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
                 problem().markElements(adaptInfo);
                 problem().adaptGrid(adaptInfo);
                 updateSurfaceBasis();
@@ -166,7 +166,7 @@ namespace AMDiS {
             problem().adaptGrid(adaptInfo);
             updateSurfaceBasis();
 
-            this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
+            // this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
         }
         transferInitialSolution(adaptInfo);
 
