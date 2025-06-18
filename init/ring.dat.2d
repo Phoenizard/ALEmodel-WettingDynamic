@@ -2,11 +2,11 @@ L: 0.00001
 T: 0.000001 %0.000001
 
 
-output directory: ../ResultsALEModelAmdis2/Jun18-inf15-pw-long
-adapt->timestep: 500
+output directory: ../ResultsALEModelAmdis2/Jun18-inf15-pw-long-t250
+adapt->timestep: 250
 adapt->start time: 0.0
 adapt->end time: 500 * 2000
-
+refinement->interface: 15
 % ========== shell parameter ====================================
 
 %explicit or implicit strategy?
@@ -143,7 +143,6 @@ parameters->eps: 0.0005
 parameters->M0: 2e-11                     % in [m³s/kg] % initial mobility
 parameters->M: 2e-11                      % in [m³s/kg] % mobility after remeshing (for a few time steps)
 
-refinement->interface: 15
 refinement->bulk: 0
 refinement->refine with stretch: 0          % = 1 if refinement after strong stretch on the surface is desired
 
@@ -234,4 +233,4 @@ adapt->strategy: 0
 start with reduced time step: 0      %start the simulation with a smaller time step, depends on "adapt->time step reduction factor" and "number of time steps for reduction"
 adapt->time step reduction factor init: 0.05
 number of time steps for reduction init: 5
-refinement->interface at start: 15
+refinement->interface at start: 10
