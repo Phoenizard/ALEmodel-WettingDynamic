@@ -153,7 +153,7 @@ namespace AMDiS {
                     };
                     this->getPhase() += QuarterRing;
                 }
-                // this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
+                this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
                 problem().markElements(adaptInfo);
                 problem().adaptGrid(adaptInfo);
                 updateSurfaceBasis();
@@ -166,7 +166,7 @@ namespace AMDiS {
             problem().adaptGrid(adaptInfo);
             updateSurfaceBasis();
 
-            // this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
+            this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
         }
         transferInitialSolution(adaptInfo);
 
