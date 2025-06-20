@@ -142,16 +142,22 @@ namespace AMDiS {
                     this->getPhase() << EnvVal; // set the environment value
                     WorldVector center{0.0, 0.0};
                     auto QuarterRing = [initialVal, EnvVal, radius, radiusIn](WorldVector const &x) {
-                        double r = std::pow(x[0], 2) + std::pow(x[1], 2);
+                        double r = std::sqrt(std::pow(x[0], 2) + std::pow(x[1], 2));
                         double theta = std::atan2(x[1], x[0]);
-                        if (!((r <= std::pow(radius, 2) && r >= std::pow(radiusIn, 2)) && 
-                                (theta >= - M_PI / 5 && theta <= M_PI / 5))) {
-                            return 0.0;
+                        if (!(theta >= - M_PI / 6 && theta <= M_PI / 6)) {
+                            return std::numeric_limits<double>::infinity();
                         } else {
-                            return initialVal - EnvVal; // Set the phase of the Quarter Ring to initialVal
+                            if (r <= radiusIn) {
+                                return radiusIn - r;
+                            } else if(r >= radius) {
+                                return r - radius;
+                            } else{
+                                return -std::min(r - radiusIn, radius - r);
+                            }
+                            // return initialVal - EnvVal; // Set the phase of the Quarter Ring to initialVal
                         }
                     };
-                    this->getPhase() += QuarterRing;
+                    this->getPhase() += clamp(phase(QuarterRing), 0.0 ,1.0);
                 }
                 this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
                 problem().markElements(adaptInfo);
