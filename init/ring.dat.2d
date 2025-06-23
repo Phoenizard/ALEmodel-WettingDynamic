@@ -1,7 +1,6 @@
 L: 0.00001
 T: 0.000001 %0.000001
 
-
 output directory: ../ResultsALEModelAmdis2/Jun23-inf15-circular-init
 adapt->timestep: 1000
 adapt->start time: 0.0
@@ -128,6 +127,7 @@ polynomial degree ch: 2
 
 phase field inside: 0                      % 1 if phase field should be present inside
 phase field outside: 1                      % 1 if phase field should be present outside
+
 circles or initial value: 0                 % 0 if circles, 1 if initial value
 phase field initial value: 1              % initial value of no circles
 env initial phase field: 0
