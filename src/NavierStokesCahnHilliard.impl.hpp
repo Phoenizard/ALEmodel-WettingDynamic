@@ -131,7 +131,7 @@ namespace AMDiS {
                                     Math::sqr((x[0] - center[0]) / radius1) + Math::sqr((x[1] - center[1]) / radius2)) -
                                                           1.0);
                         };
-                        this->getPhase() += clamp(phase(circleN), 0.0, 1.0); // phase field only inside the shell
+                        this->getPhase() += clamp(phase(circleN), -0.4632,1.6606); // phase field only inside the shell
                     }
                 } else {
                     // Quarter Ring Shape without smoothing
@@ -139,28 +139,21 @@ namespace AMDiS {
                     double EnvVal = Parameters::get<double>("env initial phase field").value_or(0);
                     double radius = Parameters::get<double>("initial radius").value_or(0.15);
                     double radiusIn = Parameters::get<double>("initial radius inside").value_or(0.15);
-                    double k_bound = Parameters::get<double>("k_bound").value_or(1.0);
                     this->getPhase() << EnvVal; // set the environment value
                     WorldVector center{0.0, 0.0};
-                    auto QuarterRing = [initialVal, EnvVal, radius, radiusIn, k_bound](WorldVector const &x) {
-                        double r = std::sqrt(std::pow(x[0], 2) + std::pow(x[1], 2));
+                    auto QuarterRing = [initialVal, EnvVal, radius, radiusIn](WorldVector const &x) {
+                        double r = std::pow(x[0], 2) + std::pow(x[1], 2);
                         double theta = std::atan2(x[1], x[0]);
-                        if (!(theta >= - M_PI / 6 && theta <= M_PI / 6)) {
-                            return std::numeric_limits<double>::infinity();
+                        if (!((r <= std::pow(radius, 2) && r >= std::pow(radiusIn, 2)) && 
+                                (theta >= - M_PI / 6 && theta <= M_PI / 6))) {
+                            return 0.0;
                         } else {
-                            if (r < radiusIn) {
-                                return std::numeric_limits<double>::infinity();
-                            } else if(r >= radius) {
-                                return (r - radius) * k_bound;
-                            } else{
-                                return -std::min(r - radiusIn, radius - r);
-                            }
-                            // return initialVal - EnvVal; // Set the phase of the Quarter Ring to initialVal
+                            return initialVal - EnvVal; // Set the phase of the Quarter Ring to initialVal
                         }
                     };
-                    this->getPhase() += clamp(phase(QuarterRing), 0.0 ,1.0);
+                    this->getPhase() += QuarterRing;
                 }
-                this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
+                // this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
                 problem().markElements(adaptInfo);
                 problem().adaptGrid(adaptInfo);
                 updateSurfaceBasis();
@@ -173,7 +166,7 @@ namespace AMDiS {
             problem().adaptGrid(adaptInfo);
             updateSurfaceBasis();
 
-            this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
+            // this->getPhase() << valueOf(*rhoDOF_, _mu) * this->getPhase();
         }
         transferInitialSolution(adaptInfo);
 
