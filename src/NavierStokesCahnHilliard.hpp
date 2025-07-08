@@ -294,8 +294,6 @@ namespace AMDiS
             auto rhoInt = Parameters::get<double>("stokes->density").value_or(0.0);
             auto rhoExt = Parameters::get<double>("stokes->density2").value_or(0.0);
             auto rhoOut = Parameters::get<double>("stokes->densityOutside").value_or(0.0);
-
-            //valueOf(*rhoDOF_,_phi) << clamp(getPhase(),0,1)*rhoInt + (1.0 - clamp(getPhase(),0,1))*rhoExt ;
             return rhoInt; //valueOf(*rhoDOF_,_phi);
         }
 
@@ -321,9 +319,9 @@ namespace AMDiS
 
             }
 
-            valueOf(*nuDOF_) << clamp(getOldPhase(),-0.4632,1.6606)*nuInt
-                                     + (1.0 - clamp(getOldPhase(),-0.4632,1.6606))*nuExt*valueOf(elementVectorOut)
-                                       + (1.0 - clamp(getOldPhase(),-0.4632,1.6606))*nuInExt*valueOf(elementVectorIn);
+            valueOf(*nuDOF_) << clamp(getOldPhase(), -0.6249, 1.0) * nuInt
+                                     + (1.0 - clamp(getOldPhase(),-0.6249, 1.0))*nuExt*valueOf(elementVectorOut)
+                                       + (1.0 - clamp(getOldPhase(),-0.6249, 1.0))*nuInExt*valueOf(elementVectorIn);
             return valueOf(*nuDOF_);
         }
 

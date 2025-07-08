@@ -2,11 +2,11 @@ L: 0.00001
 T: 0.000001 %0.000001
 
 
-output directory: ../ResultsALEModelAmdis2/Jun24-larger-init-long
-adapt->timestep: 250
+output directory: ../ResultsALEModelAmdis2/Jul5-StableTest-long-t500
+adapt->timestep: 500
 adapt->start time: 0.0
 adapt->end time: 1 / $T
-refinement->interface: 14
+refinement->interface: 10
 % ========== shell parameter ====================================
 
 %explicit or implicit strategy?
@@ -130,10 +130,10 @@ phase field inside: 0                       % 1 if phase field should be present
 phase field outside: 1                      % 1 if phase field should be present outside
 circles or initial value: 1                 % 0 if circles, 1 if initial value
 phase field initial value: 1.0              % initial value of no circles
-env initial phase field: -0.463
+env initial phase field: -0.6249
 phase field initial value random: 0       % initial value of no circles
-initial radius: 1.26               % radius within initial phase field should be located
-initial radius inside: 1.25                 % radius to exclude initial phase field
+initial radius: 0.265               % radius within initial phase field should be located
+initial radius inside: 0.250                 % radius to exclude initial phase field
 
 use capillary stress: 1                     % 1 if capillary stress should be used, 0 if modified coupling term
 parameters->couplingSign3: 0                % negative is correct if capillary stress is 0 (or zero, if capillary stress is 1)
@@ -167,7 +167,7 @@ parameter output file name: ${output directory}/parameters.2d
 every: 1
 every2: 10000
 
-stokesMesh->macro file name: ./macro/circleLargerDomain5.msh
+stokesMesh->macro file name: ./macro/circleLargerDomainFiner.msh
 %circle.msh 0.0, 0.25
 stokes->mesh: newMesh
 newMesh->macro file name: ${output directory}/newMesh.msh
