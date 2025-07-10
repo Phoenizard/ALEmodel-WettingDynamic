@@ -319,9 +319,9 @@ namespace AMDiS
 
             }
 
-            valueOf(*nuDOF_) << clamp(getOldPhase(), -0.6249, 1.0) * nuInt
-                                     + (1.0 - clamp(getOldPhase(),-0.6249, 1.0))*nuExt*valueOf(elementVectorOut)
-                                       + (1.0 - clamp(getOldPhase(),-0.6249, 1.0))*nuInExt*valueOf(elementVectorIn);
+            valueOf(*nuDOF_) << clamp(getOldPhase(), -0.6249, 0.3751) * nuInt
+                                     + (0.3751 - clamp(getOldPhase(),-0.6249, 0.3751))*nuExt*valueOf(elementVectorOut)
+                                       + (0.3751 - clamp(getOldPhase(),-0.6249, 0.3751))*nuInExt*valueOf(elementVectorIn);
             return valueOf(*nuDOF_);
         }
 

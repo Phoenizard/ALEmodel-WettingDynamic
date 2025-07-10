@@ -2,10 +2,10 @@ L: 0.00001
 T: 0.000001 %0.000001
 
 
-output directory: ../ResultsALEModelAmdis2/Jul5-StableTest-long-t500
-adapt->timestep: 500
+output directory: ../ResultsALEModelAmdis2/Jul8-StableTest-0-1
+adapt->timestep: 100
 adapt->start time: 0.0
-adapt->end time: 1 / $T
+adapt->end time: 1000
 refinement->interface: 10
 % ========== shell parameter ====================================
 
@@ -21,22 +21,22 @@ Kb: 8e-20
 bendingStiffness: ${Kb}*$T*$T/($L*$L*$L*$L*$L) %11.1 * 1e-15 * $T*$T/$L/$L/$L/$L/$L
 spontaneous curvature: 0                   % in 1/m
 areaShear: 0.0                             %1.e7 % 0.008333 * $T*$T/$L/$L/$L
-areaDilation: 5e-5*$T*$T/($L*$L*$L)                          %25.0 % 3.e7 % 0.025 * $T/*$T/$L$L/$L
-lineTension: 0.0*10.e-12*$T*$T/$L/$L/$L/$L
+areaDilation: 500                          %25.0 % 3.e7 % 0.025 * $T/*$T/$L$L/$L
+lineTension: 1.0*10.e-12*$T*$T/$L/$L/$L/$L
 zeroReferenceCurvature: 0                  % 1 if reference curvature is zero, 0 else (EXPLICIT BENDING ONLY!)
 test for elastic only: 1.0
 
 correct point distances: 0                 %1 if points on interface and shell should be kept in equal distances
 
 % ========== inextensibility =====================================
-is shell incompressible: 1                 %1 if incompressible shell, 0 else
+is shell incompressible: 0                 %1 if incompressible shell, 0 else
 surface inextensibility diffusion: 1.e-11
 surface concentration relaxation: 0.0001
 
 % ========== surface tensions ====================================
-parameters->sigma: 30.0*1e-6*$T*$T/($L*$L*$L)                % = sigma_{\beta\gamma} in [N/m] -> umrechnungsfaktor 10^6*2*pi
-parameters->sigma1: 16.0*1e-6*$T*$T/($L*$L*$L)               % = sigma_{\alpha\beta} 1-sigma/6/sqrt(2)
-parameters->sigma0: 15.0*1e-6*$T*$T/($L*$L*$L)
+parameters->sigma: 30.0*1e-3*$T*$T/($L*$L*$L)                % = sigma_{\beta\gamma} in [N/m] -> umrechnungsfaktor 10^6*2*pi
+parameters->sigma1: 16.0*1e-3*$T*$T/($L*$L*$L)               % = sigma_{\alpha\beta} 1-sigma/6/sqrt(2)
+parameters->sigma0: 15.0*1e-3*$T*$T/($L*$L*$L)
 
 % ========== permeability ========================================
 parameters->permeability: 0.0*$L/$T %0.001 % 0.001             %m/s => 10^-8 m²s/kg -> 1e-8*$L/$T
@@ -45,7 +45,7 @@ use p0 for permeability: 1
 
 
 % ========== fluid parameter ===================================
-visc: 10
+visc: 1.0
 stokes->viscosityPhase:  10.001*$T/$L/$L        % =1.0 * $T/$L/$L, internal viscosity (phi = 1)
 stokes->viscosityOutside: (${visc}+2e-3)*$T/$L/$L     % =1.0 * $T/$L/$L, external viscosity (phi = 0)
 stokes->viscosityInside: ${visc}*$T/$L/$L        % =1.0 * $T/$L/$L, external viscosity (phi = 0)
@@ -130,9 +130,11 @@ phase field inside: 0                       % 1 if phase field should be present
 phase field outside: 1                      % 1 if phase field should be present outside
 circles or initial value: 1                 % 0 if circles, 1 if initial value
 phase field initial value: 1.0              % initial value of no circles
-env initial phase field: -0.6249
+% phase field initial value: 0.3751
+% env initial phase field: -0.6249
+env initial phase field: 0.0
 phase field initial value random: 0       % initial value of no circles
-initial radius: 0.265               % radius within initial phase field should be located
+initial radius: 0.260               % radius within initial phase field should be located
 initial radius inside: 0.250                 % radius to exclude initial phase field
 
 use capillary stress: 1                     % 1 if capillary stress should be used, 0 if modified coupling term

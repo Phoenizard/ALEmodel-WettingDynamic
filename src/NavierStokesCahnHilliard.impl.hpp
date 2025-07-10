@@ -131,7 +131,7 @@ namespace AMDiS {
                                     Math::sqr((x[0] - center[0]) / radius1) + Math::sqr((x[1] - center[1]) / radius2)) -
                                                           1.0);
                         };
-                        this->getPhase() += clamp(phase(circleN), -0.6249, 1.0); // phase field only inside the shell
+                        this->getPhase() += clamp(phase(circleN), -0.6249, 0.3751); // phase field only inside the shell
                     }
                 } else {
                     // Quarter Ring Shape without smoothing
@@ -185,8 +185,8 @@ namespace AMDiS {
             }
             this->solution(_lambda2).coefficients().finish();
         }
-        dropletVolume0_ = integrate((2.0*M_PI*X(1)*axi + (1.0 - axi)) * clamp(getPhase(),-0.6249,1.0) *
-                invokeAtQP([](double phi) {return (phi > 1.875) ? 1 : 0;}, clamp(getPhase(),-0.6249,1.0)),gridView(),2);
+        dropletVolume0_ = integrate((2.0*M_PI*X(1)*axi + (1.0 - axi)) * clamp(getPhase(),-0.6249,0.3751) *
+                invokeAtQP([](double phi) {return (phi > -0.1249) ? 1 : 0;}, clamp(getPhase(),-0.6249,0.3751)),gridView(),2);
         volume0_ = integrateShell(1.0, gridView(), partitions_,1,1);
     }
 
@@ -230,8 +230,8 @@ namespace AMDiS {
             shellAreaChange_ = relaxation * (shellArea0_ - shellArea_) / shellArea0_;
             std::cout << "relative area change = " << shellAreaChange_ / (relaxation + 1e-10) << "\n";
         }
-        dropletVolume_ = integrate((2.0*M_PI*X(1)*axi + (1.0 - axi)) * clamp(getOldPhase(),-0.6249, 1.0) *
-                                           invokeAtQP([](double phi) {return (phi > 1.875) ? 1 : 0;}, clamp(getOldPhase(),-0.6249, 1.0)),gridView(),2);
+        dropletVolume_ = integrate((2.0*M_PI*X(1)*axi + (1.0 - axi)) * clamp(getOldPhase(),-0.6249, 0.) *
+                                           invokeAtQP([](double phi) {return (phi > -0.1249) ? 1 : 0;}, clamp(getOldPhase(),-0.6249, 1.0)),gridView(),2);
 
         auto delta_D = Parameters::get<double>("droplet volume conservation parameter").template value_or(0);
         auto delta_V = Parameters::get<double>("volume restore constant").template value_or(0);
@@ -252,8 +252,8 @@ namespace AMDiS {
         // clamp phase field
         auto clam = Parameters::get<int>("clamp phase field after timestep").value_or(0);
         if (clam) {
-            getPhase() << clamp(getPhase(),-0.6249, 1.0);
-            solution(_phiS) << clamp(solution(_phiS),-0.6249, 1.0);
+            getPhase() << clamp(getPhase(),-0.6249, 0.3751);
+            solution(_phiS) << clamp(solution(_phiS),-0.6249, 0.3751);
         }
 
         // compute data for post processing
